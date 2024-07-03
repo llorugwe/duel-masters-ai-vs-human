@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
+import { login } from '../services/authService';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle login logic here
-    console.log('Login:', { email, password });
+    try {
+      const data = await login({ email, password });
+      localStorage.setItem('token', data.token);
+      setMessage('Login successful');
+    } catch (error) {
+      setMessage('Error: ' + error.response.data.message);
+    }
   };
 
   return (
@@ -24,6 +31,7 @@ function Login() {
         </div>
         <button type="submit">Login</button>
       </form>
+      {message && <p>{message}</p>}
     </div>
   );
 }

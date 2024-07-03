@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
+import { register } from '../services/authService';
 
 function Registration() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle registration logic here
-    console.log('Register:', { username, email, password });
+    try {
+      const data = await register({ username, email, password });
+      setMessage(data.message);
+    } catch (error) {
+      setMessage('Error: ' + error.response.data.message);
+    }
   };
 
   return (
@@ -29,9 +35,9 @@ function Registration() {
         </div>
         <button type="submit">Register</button>
       </form>
+      {message && <p>{message}</p>}
     </div>
   );
 }
 
 export default Registration;
-
