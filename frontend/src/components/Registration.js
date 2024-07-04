@@ -13,7 +13,7 @@ function Registration() {
       const data = await register({ username, email, password });
       setMessage(data.message);
     } catch (error) {
-      setMessage('Error: ' + error.response.data.message);
+      setMessage('Error: ' + (error.response?.data?.message || error.message)); // Handle potential undefined error.response or error.response.data
     }
   };
 

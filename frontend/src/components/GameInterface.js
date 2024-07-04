@@ -6,19 +6,14 @@ function GameInterface() {
 
   const handleStartGame = async () => {
     try {
-      const token = localStorage.getItem('token');
       const data = await createGameSession({
         players: ['player1', 'player2'],
         state: 'ongoing',
         moves: [],
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
       });
-      setMessage(data.message);
+      setMessage(data.message); // Ensure we are accessing the message property correctly
     } catch (error) {
-      setMessage('Error: ' + error.response.data.message);
+      setMessage('Error: ' + (error.response?.data?.message || error.message)); // Handle potential undefined error.response or error.response.data
     }
   };
 
