@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors()); // Enable CORS
+app.use(cors());
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost/duel_masters', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -18,6 +18,10 @@ app.get('/', (req, res) => res.send('API Running'));
 // User routes
 const userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes);
+
+// Game session routes
+const gameSessionRoutes = require('./routes/gameSessionRoutes');
+app.use('/api/game-sessions', gameSessionRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
