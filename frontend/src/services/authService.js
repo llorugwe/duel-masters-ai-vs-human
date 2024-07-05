@@ -1,12 +1,11 @@
-import api from './api';
+import axios from 'axios';
 
-export const register = async (userData) => {
-  const response = await api.post('/users/register', userData);
-  return response.data; // Ensure we are returning the data property
+export const login = async (credentials) => {
+  const response = await axios.post('http://localhost:5000/api/users/login', credentials);
+  return response.data; // Ensure we return the correct data format
 };
 
-export const login = async (userData) => {
-  const response = await api.post('/users/login', userData);
-  return response.data; // Ensure we are returning the data property
+export const register = async (credentials) => {
+  const response = await axios.post('http://localhost:5000/api/users/register', credentials);
+  return response.data;
 };
-

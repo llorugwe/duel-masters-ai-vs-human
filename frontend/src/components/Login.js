@@ -10,9 +10,11 @@ function Login() {
     event.preventDefault();
     try {
       const data = await login({ email, password });
-      localStorage.setItem('token', data.token);
+      console.log('Login response:', data); // Debugging line
+      localStorage.setItem('token', data.token); // Store token in local storage
       setMessage('Login successful');
     } catch (error) {
+      console.error('Login error:', error); // Debugging line
       setMessage('Error: ' + (error.response?.data?.message || error.message));
     }
   };
