@@ -2,6 +2,9 @@ const { validationResult } = require('express-validator');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const config = require('config');
+
+const jwtSecret = config.get('jwtSecret');
 
 // Register a new user
 const registerUser = async (req, res) => {
@@ -58,7 +61,7 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id }, jwtSecret, { expiresIn: '1h' });
 
     res.status(200).json({ token });
   } catch (error) {
