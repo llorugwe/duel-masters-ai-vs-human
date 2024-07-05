@@ -11,7 +11,7 @@ function Registration() {
     event.preventDefault();
     try {
       const data = await register({ username, email, password });
-      setMessage(data.message);
+      setMessage('Registration successful: ' + data.message);
     } catch (error) {
       setMessage('Error: ' + (error.response?.data?.message || error.message));
     }
