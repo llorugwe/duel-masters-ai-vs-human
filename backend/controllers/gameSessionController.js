@@ -1,28 +1,38 @@
 const GameSession = require('../models/GameSession');
+const { validationResult } = require('express-validator');
 
 // Create a new game session
-exports.createGameSession = async (req, res) => {
+const createGameSession = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { sessionName, players } = req.body;
+
   try {
-    const gameSession = new GameSession({
-      player: req.user.id,
-      gameData: req.body.gameData,
+    const newGameSession = new GameSession({
+      sessionName,
+      players,
     });
 
-    const savedGameSession = await gameSession.save();
-    res.status(201).json(savedGameSession);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    await newGameSession.save();
+    res.status(201).json(newGameSession);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
-// Get all game sessions for a user
-exports.getGameSessions = async (req, res) => {
+// Get all game sessions
+const getGameSessions = async (req, res) => {
   try {
-    const gameSessions = await GameSession.find({ player: req.user.id });
-    res.json(gameSessions);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    const gameSessions = await GameSession.find();
+    res.status(200).json(gameSessions);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Server error' });
   }
 };
+
+module.exports = { createGameSession, getGameSessions };
