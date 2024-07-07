@@ -6,6 +6,7 @@ function GameInterface() {
   const [player, setPlayer] = useState('');
   const [move, setMove] = useState('');
   const [message, setMessage] = useState('');
+  const [aiResponse, setAiResponse] = useState('');
 
   const handleMove = async () => {
     try {
@@ -17,8 +18,9 @@ function GameInterface() {
         },
       };
       const body = JSON.stringify({ gameId, player, move });
-      const response = await axios.post('http://localhost:5000/api/ai/make-move', body, config);
-      setMessage(response.data.message);
+      const response = await axios.post('http://localhost:5000/api/game-sessions/make-move', body, config);
+      setMessage('Move made successfully');
+      setAiResponse(response.data.aiResponse);
     } catch (err) {
       setMessage(err.response.data.message || 'Error: Request failed with status code ' + err.response.status);
     }
@@ -41,6 +43,7 @@ function GameInterface() {
       </div>
       <button onClick={handleMove}>Make Move</button>
       {message && <p>{message}</p>}
+      {aiResponse && <p>AI Response: {aiResponse}</p>}
     </div>
   );
 }
