@@ -5,6 +5,7 @@ function GameInterface() {
   const [gameId, setGameId] = useState('');
   const [player, setPlayer] = useState('');
   const [move, setMove] = useState('');
+  const [result, setResult] = useState(''); // New state for result
   const [message, setMessage] = useState('');
 
   const handleMove = async () => {
@@ -16,14 +17,11 @@ function GameInterface() {
           'x-auth-token': token,
         },
       };
-      const body = JSON.stringify({ gameId, player, move });
-      console.log("Request body:", body);
+      const body = JSON.stringify({ gameId, player, move, result });
       const response = await axios.post('http://localhost:5000/api/game-sessions/make-move', body, config);
-      console.log("Response:", response.data);
       setMessage('Move made successfully');
     } catch (err) {
-      console.error("Error making move:", err);
-      setMessage(err.response.data.message || 'Error: Request failed with status code ' + err.response.status);
+      setMessage(err.response?.data?.message || 'Error: Request failed with status code ' + err.response?.status);
     }
   };
 
@@ -41,6 +39,10 @@ function GameInterface() {
       <div>
         <label>Move:</label>
         <input type="text" value={move} onChange={(e) => setMove(e.target.value)} />
+      </div>
+      <div>
+        <label>Result:</label> {/* New input for result */}
+        <input type="text" value={result} onChange={(e) => setResult(e.target.value)} />
       </div>
       <button onClick={handleMove}>Make Move</button>
       {message && <p>{message}</p>}

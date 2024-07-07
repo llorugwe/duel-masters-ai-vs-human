@@ -1,21 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { getLeaderboard } from '../services/leaderboardService';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState([]);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const data = await getLeaderboard({
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setLeaderboard(data);
-      } catch (error) {
-        console.error('Error fetching leaderboard:', error);
+        const response = await axios.get('http://localhost:5000/api/leaderboard');
+        setLeaderboard(response.data);
+      } catch (err) {
+        setMessage('Error fetching leaderboard');
       }
     };
 
@@ -25,10 +21,11 @@ function Leaderboard() {
   return (
     <div>
       <h2>Leaderboard</h2>
+      {message && <p>{message}</p>}
       <ul>
-        {leaderboard.map((entry) => (
-          <li key={entry._id}>
-            {entry.player}: {entry.score}
+        {leaderboard.map((entry, index) => (
+          <li key={index}>
+            {entry.player}: {entry.wins} Wins, {entry.losses} Losses, {entry.draws} Draws
           </li>
         ))}
       </ul>
