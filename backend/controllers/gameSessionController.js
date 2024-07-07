@@ -37,7 +37,7 @@ const getGameSessions = async (req, res) => {
 
 // Make a move in a game session
 const makeMove = async (req, res) => {
-  const { gameId, player, move, result } = req.body;
+  const { gameId, player, move } = req.body;
 
   try {
     // Find the game session by ID
@@ -47,10 +47,15 @@ const makeMove = async (req, res) => {
     }
 
     // Add the move to the game session
-    gameSession.moves.push({ player, move, result });
+    gameSession.moves.push({ player, move });
+
+    // Simulate AI response (You can replace this with actual AI logic)
+    const aiResponse = `AI responded to move: ${move}`;
+    gameSession.moves.push({ player: 'AI', move: aiResponse });
+
     await gameSession.save();
 
-    res.status(200).json({ message: 'Move made successfully', gameSession });
+    res.status(200).json({ message: 'Move made successfully', gameSession, aiResponse });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: 'Server error' });
