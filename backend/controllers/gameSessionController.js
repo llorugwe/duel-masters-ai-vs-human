@@ -35,6 +35,15 @@ const getGameSessions = async (req, res) => {
   }
 };
 
+// AI Logic for making a move
+const aiMakeMove = (currentMove) => {
+  // Implement AI strategy here. For simplicity, we will make the AI always respond with "AI move".
+  // In a real game, this function should analyze the currentMove and decide the best move.
+  const possibleMoves = ['move1', 'move2', 'move3']; // Example moves
+  const randomMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+  return `AI responded to move: ${randomMove}`;
+};
+
 // Make a move in a game session
 const makeMove = async (req, res) => {
   const { gameId, player, move } = req.body;
@@ -49,8 +58,8 @@ const makeMove = async (req, res) => {
     // Add the move to the game session
     gameSession.moves.push({ player, move });
 
-    // Simulate AI response (You can replace this with actual AI logic)
-    const aiResponse = `AI responded to move: ${move}`;
+    // AI makes a move in response
+    const aiResponse = aiMakeMove(move);
     gameSession.moves.push({ player: 'AI', move: aiResponse });
 
     await gameSession.save();
