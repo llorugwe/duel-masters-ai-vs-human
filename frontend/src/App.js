@@ -1,22 +1,22 @@
 
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Use Routes instead of Switch
-import Home from './components/Home';
-import Registration from './components/Registration';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './components/Login';
-import GameSessions from './components/GameSessions';
+import Registration from './components/Registration';
 import GameInterface from './components/GameInterface';
+import GameSessions from './components/GameSessions';
+import Leaderboard from './components/Leaderboard';
 
 function App() {
   return (
     <Router>
-      <div className="App">
-        <Routes> {/* Use Routes instead of Switch */}
-          <Route path="/" exact element={<Home />} /> {/* Use element instead of component */}
+      <div>
+        <Routes>
           <Route path="/register" element={<Registration />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/game-sessions" element={<GameSessions />} />
           <Route path="/game-interface" element={<GameInterface />} />
+          <Route path="/game-sessions" element={<GameSessions />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>
       </div>
     </Router>

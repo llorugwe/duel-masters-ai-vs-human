@@ -10,10 +10,6 @@ function GameInterface() {
   const handleMove = async () => {
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        setMessage('No token found, please login again.');
-        return;
-      }
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -21,10 +17,9 @@ function GameInterface() {
         },
       };
       const body = JSON.stringify({ gameId, player, move });
-      await axios.post('http://localhost:5000/api/game-sessions/make-move', body, config);
-      setMessage('Move made successfully');
+      const response = await axios.post('http://localhost:5000/api/ai/make-move', body, config);
+      setMessage(response.data.message);
     } catch (err) {
-      console.error(err);
       setMessage(err.response.data.message || 'Error: Request failed with status code ' + err.response.status);
     }
   };
