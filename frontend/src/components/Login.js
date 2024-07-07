@@ -10,12 +10,11 @@ function Login() {
     event.preventDefault();
     try {
       const data = await login({ email, password });
-      console.log('Login response:', data); // Debugging line
+      console.log('Login response data:', data); // Debugging log
       localStorage.setItem('token', data.token); // Store token in local storage
       setMessage('Login successful');
     } catch (error) {
-      console.error('Login error:', error); // Debugging line
-      setMessage('Error: ' + (error.response?.data?.message || error.message));
+      setMessage('Error: ' + error.response.data.message);
     }
   };
 
@@ -25,21 +24,11 @@ function Login() {
       <form onSubmit={handleSubmit}>
         <div>
           <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
         <div>
           <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
         <button type="submit">Login</button>
       </form>
