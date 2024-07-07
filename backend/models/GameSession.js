@@ -1,23 +1,36 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const GameSessionSchema = new Schema({
+const GameSessionSchema = new mongoose.Schema({
   sessionName: {
     type: String,
     required: true
   },
-  players: {
-    type: [String],
-    required: true
-  },
-  createdBy: {
-    type: Schema.Types.ObjectId,
-    ref: 'users'
-  },
+  players: [
+    {
+      type: String,
+      required: true
+    }
+  ],
+  moves: [
+    {
+      player: {
+        type: String,
+        required: true
+      },
+      move: {
+        type: String,
+        required: true
+      },
+      timestamp: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ],
   createdAt: {
     type: Date,
     default: Date.now
   }
 });
 
-module.exports = mongoose.model('gameSessions', GameSessionSchema);
+module.exports = mongoose.model('GameSession', GameSessionSchema);
