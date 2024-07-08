@@ -1,0 +1,39 @@
+.game-state {
+    margin-top: 20px;
+  }
+  
+  .game-state h3 {
+    margin-bottom: 10px;
+  }
+  
+  .board {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+  
+  .row {
+    display: flex;
+  }
+  
+  .cell {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .cell.AI {
+    background-color: red;
+  }
+  
+  .cell.Player1 {
+    background-color: green;
+  }
+  
+  .cell.Player2 {
+    background-color: blue;
+  }
+  

@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Board from './Board';
+import './GameInterface.css';
 
 function GameInterface() {
   const [gameId, setGameId] = useState('');
   const [player, setPlayer] = useState('');
   const [move, setMove] = useState('');
   const [message, setMessage] = useState('');
-  const [aiResponse, setAiResponse] = useState('');
+  const [gameState, setGameState] = useState(null);
 
   const handleMove = async () => {
     try {
@@ -20,7 +22,7 @@ function GameInterface() {
       const body = JSON.stringify({ gameId, player, move });
       const response = await axios.post('http://localhost:5000/api/game-sessions/make-move', body, config);
       setMessage('Move made successfully');
-      setAiResponse(response.data.aiResponse);
+      setGameState(response.data.gameSession);
     } catch (err) {
       setMessage(err.response.data.message || 'Error: Request failed with status code ' + err.response.status);
     }
@@ -43,7 +45,15 @@ function GameInterface() {
       </div>
       <button onClick={handleMove}>Make Move</button>
       {message && <p>{message}</p>}
-      {aiResponse && <p>AI Response: {aiResponse}</p>}
+      {gameState && (
+        <>
+          <h3>Game State</h3>
+          <div>Player Positions: {JSON.stringify(Object.fromEntries(gameState.playerPositions))}</div>
+          <div>Player Health: {JSON.stringify(Object.fromEntries(gameState.playerHealth))}</div>
+          <div>Moves: {JSON.stringify(gameState.moves)}</div>
+          <Board gameState={gameState} />
+        </>
+      )}
     </div>
   );
 }

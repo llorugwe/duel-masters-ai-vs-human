@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './components/Login';
@@ -6,6 +5,7 @@ import Registration from './components/Registration';
 import GameInterface from './components/GameInterface';
 import GameSessions from './components/GameSessions';
 import Leaderboard from './components/Leaderboard';
+import GameScene from './components/GameScene';
 
 function App() {
   return (
@@ -17,6 +17,7 @@ function App() {
           <Route path="/game-interface" element={<GameInterface />} />
           <Route path="/game-sessions" element={<GameSessions />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/game-scene" element={<GameScene />} />
         </Routes>
       </div>
     </Router>
