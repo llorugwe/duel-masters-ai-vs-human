@@ -10,6 +10,28 @@ function GameInterface() {
   const [message, setMessage] = useState('');
   const [gameState, setGameState] = useState(null);
 
+  const handleCreateGameSession = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': token,
+        },
+      };
+      const response = await axios.post('http://localhost:5000/api/game-sessions', {
+        sessionName: 'New Game',
+        players: ['Player1', 'Player2', 'AI']
+      }, config);
+      setGameId(response.data._id);
+      setGameState(response.data);
+      console.log('Game session created:', response.data);
+    } catch (error) {
+      console.error('Error creating game session', error);
+      setMessage('Failed to create game session. Please try again.');
+    }
+  };
+
   const handleMove = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -23,17 +45,25 @@ function GameInterface() {
       const response = await axios.post('http://localhost:5000/api/game-sessions/make-move', body, config);
       setMessage('Move made successfully');
       setGameState(response.data.gameSession);
+      console.log('Move made:', response.data);
     } catch (err) {
       setMessage(err.response.data.message || 'Error: Request failed with status code ' + err.response.status);
+      console.error('Error making move:', err);
     }
   };
 
+  useEffect(() => {
+    if (!gameId) {
+      handleCreateGameSession();
+    }
+  }, []);
+
   return (
-    <div>
+    <div className="game-interface">
       <h2>Game Interface</h2>
       <div>
         <label>Game ID:</label>
-        <input type="text" value={gameId} onChange={(e) => setGameId(e.target.value)} />
+        <input type="text" value={gameId} readOnly />
       </div>
       <div>
         <label>Player:</label>
@@ -48,8 +78,8 @@ function GameInterface() {
       {gameState && (
         <>
           <h3>Game State</h3>
-          <div>Player Positions: {JSON.stringify(Object.fromEntries(gameState.playerPositions))}</div>
-          <div>Player Health: {JSON.stringify(Object.fromEntries(gameState.playerHealth))}</div>
+          <div>Player Positions: {JSON.stringify(gameState.playerPositions)}</div>
+          <div>Player Health: {JSON.stringify(gameState.playerHealth)}</div>
           <div>Moves: {JSON.stringify(gameState.moves)}</div>
           <Board gameState={gameState} />
         </>

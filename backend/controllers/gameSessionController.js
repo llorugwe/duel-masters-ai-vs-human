@@ -7,7 +7,7 @@ const handlePlayerMove = (gameSession, player, move) => {
   const playerHealth = gameSession.playerHealth;
   const board = gameSession.board;
 
-  const currentPosition = playerPositions.get(player) || [0, 0];
+  const currentPosition = playerPositions[player] || [0, 0];
   let newPosition = [...currentPosition];
 
   switch (move) {
@@ -39,7 +39,7 @@ const handlePlayerMove = (gameSession, player, move) => {
       break;
   }
 
-  playerPositions.set(player, newPosition);
+  playerPositions[player] = newPosition;
   gameSession.playerPositions = playerPositions;
   gameSession.playerHealth = playerHealth;
 };
@@ -68,8 +68,14 @@ const createGameSession = async (req, res) => {
     const newGameSession = new GameSession({
       sessionName,
       players,
-      playerPositions: new Map(players.map(player => [player, [0, 0]])),
-      playerHealth: new Map(players.map(player => [player, 100])),
+      playerPositions: players.reduce((acc, player) => {
+        acc[player] = [0, 0];
+        return acc;
+      }, {}),
+      playerHealth: players.reduce((acc, player) => {
+        acc[player] = 100;
+        return acc;
+      }, {}),
       board: Array(10).fill().map(() => Array(10).fill(null)) // Changed board size to 10x10
     });
 
