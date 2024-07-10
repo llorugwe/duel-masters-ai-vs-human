@@ -3,11 +3,13 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f0f0f0;
+  background-image: url('/background.jpg'); /* Correct path to the image */
+  background-size: cover;
+  background-position: center;
 }
 
 .auth-box {
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.9);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -16,6 +18,17 @@
 }
 
 .auth-box h2 {
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.auth-box p {
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.auth-box h3 {
   margin-bottom: 20px;
 }
 

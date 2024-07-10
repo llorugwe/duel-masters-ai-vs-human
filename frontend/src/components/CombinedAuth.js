@@ -42,7 +42,9 @@ const CombinedAuth = () => {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h2>{isLogin ? 'Login' : 'Register'}</h2>
+        <h2>Welcome to Duel Masters: AI vs. Human</h2>
+        <p>Embark on an epic battle between artificial intelligence and human intellect. Log in or register to join the adventure!</p>
+        <h3>{isLogin ? 'Login' : 'Register'}</h3>
         <form onSubmit={onSubmit}>
           {!isLogin && (
             <div className="form-group">
