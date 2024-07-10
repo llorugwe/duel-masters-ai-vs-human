@@ -3,7 +3,11 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
+<<<<<<< HEAD
   /* background-image: url('/background.jpg'); */ /* Commented out the background image */
+=======
+  /* background-image: url('/background.jpg'); */ /* Correct path to the image */
+>>>>>>> 7b00ffdbb9c77d363182ed5d7dec97b20aa56e48
   background-size: cover;
   background-position: center;
 }
