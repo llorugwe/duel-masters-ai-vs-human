@@ -12,7 +12,7 @@ const GameSessionSchema = new Schema({
   },
   playerPositions: {
     type: Map,
-    of: [Number], // Change this line to store arrays of numbers
+    of: [Number], // Storing arrays of numbers
     required: true,
   },
   playerHealth: {
@@ -21,7 +21,7 @@ const GameSessionSchema = new Schema({
     required: true,
   },
   board: {
-    type: [[String]], // Array of arrays of strings (for the board)
+    type: [[{ terrain: String }]], // Change to array of arrays of objects with terrain property
     required: true,
   },
   moves: {

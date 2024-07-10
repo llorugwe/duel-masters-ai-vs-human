@@ -76,7 +76,18 @@ const createGameSession = async (req, res) => {
         acc[player] = 100;
         return acc;
       }, {}),
-      board: Array(10).fill().map(() => Array(10).fill(null)) // Changed board size to 10x10
+      board: [
+        [{ terrain: 'mountain' }, { terrain: 'desert' }, { terrain: 'forest' }, { terrain: 'water' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'grass' }, { terrain: 'mountain' }, { terrain: 'forest' }, { terrain: 'water' }],
+        [{ terrain: 'grass' }, { terrain: 'forest' }, { terrain: 'desert' }, { terrain: 'forest' }, { terrain: 'grass' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'water' }, { terrain: 'water' }],
+        [{ terrain: 'water' }, { terrain: 'desert' }, { terrain: 'grass' }, { terrain: 'water' }, { terrain: 'desert' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'water' }, { terrain: 'forest' }, { terrain: 'mountain' }],
+        [{ terrain: 'grass' }, { terrain: 'desert' }, { terrain: 'water' }, { terrain: 'desert' }, { terrain: 'water' }, { terrain: 'grass' }, { terrain: 'water' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'forest' }],
+        [{ terrain: 'water' }, { terrain: 'forest' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'desert' }, { terrain: 'water' }, { terrain: 'water' }, { terrain: 'grass' }, { terrain: 'forest' }, { terrain: 'grass' }],
+        [{ terrain: 'mountain' }, { terrain: 'grass' }, { terrain: 'water' }, { terrain: 'water' }, { terrain: 'mountain' }, { terrain: 'desert' }, { terrain: 'grass' }, { terrain: 'water' }, { terrain: 'mountain' }, { terrain: 'desert' }],
+        [{ terrain: 'water' }, { terrain: 'grass' }, { terrain: 'forest' }, { terrain: 'forest' }, { terrain: 'desert' }, { terrain: 'water' }, { terrain: 'water' }, { terrain: 'forest' }, { terrain: 'mountain' }, { terrain: 'desert' }],
+        [{ terrain: 'forest' }, { terrain: 'mountain' }, { terrain: 'grass' }, { terrain: 'mountain' }, { terrain: 'desert' }, { terrain: 'grass' }, { terrain: 'grass' }, { terrain: 'grass' }, { terrain: 'forest' }, { terrain: 'forest' }],
+        [{ terrain: 'mountain' }, { terrain: 'grass' }, { terrain: 'desert' }, { terrain: 'desert' }, { terrain: 'grass' }, { terrain: 'mountain' }, { terrain: 'water' }, { terrain: 'forest' }, { terrain: 'forest' }, { terrain: 'mountain' }],
+        [{ terrain: 'forest' }, { terrain: 'mountain' }, { terrain: 'grass' }, { terrain: 'water' }, { terrain: 'desert' }, { terrain: 'water' }, { terrain: 'forest' }, { terrain: 'desert' }, { terrain: 'grass' }, { terrain: 'desert' }]
+      ]
     });
 
     await newGameSession.save();

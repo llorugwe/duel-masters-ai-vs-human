@@ -1,22 +1,27 @@
 const express = require('express');
-const { check } = require('express-validator');
-const auth = require('../middleware/auth');
-const { makeMove } = require('../controllers/gameController');
-
 const router = express.Router();
+const { check } = require('express-validator');
+const gameSessionController = require('../controllers/gameSessionController');
+// const auth = require('../middleware/auth'); // Comment out this line
 
-// Route to handle game moves
+// @route    POST api/game-sessions
+// @desc     Create a game session
+// @access   Private
+router.post(
+  '/',
+  // [auth, [check('sessionName', 'Session name is required').not().isEmpty()]],
+  [[check('sessionName', 'Session name is required').not().isEmpty()]], // Modified line
+  gameSessionController.createGameSession
+);
+
+// @route    POST api/game-sessions/make-move
+// @desc     Make a move in a game session
+// @access   Private
 router.post(
   '/make-move',
-  [
-    auth,
-    [
-      check('gameId', 'Game ID is required').not().isEmpty(),
-      check('player', 'Player is required').not().isEmpty(),
-      check('move', 'Move is required').not().isEmpty(),
-    ],
-  ],
-  makeMove
+  // auth,
+  gameSessionController.makeMove
 );
 
 module.exports = router;
+

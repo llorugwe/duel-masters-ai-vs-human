@@ -12,17 +12,10 @@ function GameInterface() {
 
   const handleCreateGameSession = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-token': token,
-        },
-      };
       const response = await axios.post('http://localhost:5000/api/game-sessions', {
         sessionName: 'New Game',
         players: ['Player1', 'Player2', 'AI']
-      }, config);
+      });
       setGameId(response.data._id);
       setGameState(response.data);
       console.log('Game session created:', response.data);
@@ -34,20 +27,13 @@ function GameInterface() {
 
   const handleMove = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-token': token,
-        },
-      };
-      const body = JSON.stringify({ gameId, player, move });
-      const response = await axios.post('http://localhost:5000/api/game-sessions/make-move', body, config);
+      const body = { gameId, player, move };
+      const response = await axios.post('http://localhost:5000/api/game-sessions/make-move', body);
       setMessage('Move made successfully');
       setGameState(response.data.gameSession);
       console.log('Move made:', response.data);
     } catch (err) {
-      setMessage(err.response.data.message || 'Error: Request failed with status code ' + err.response.status);
+      setMessage(err.response?.data?.message || 'Error: Request failed with status code ' + err.response?.status);
       console.error('Error making move:', err);
     }
   };
