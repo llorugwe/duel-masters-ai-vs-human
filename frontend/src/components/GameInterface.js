@@ -12,10 +12,17 @@ function GameInterface() {
 
   const handleCreateGameSession = async () => {
     try {
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': token,
+        },
+      };
       const response = await axios.post('http://localhost:5000/api/game-sessions', {
         sessionName: 'New Game',
         players: ['Player1', 'Player2', 'AI']
-      });
+      }, config);
       setGameId(response.data._id);
       setGameState(response.data);
       console.log('Game session created:', response.data);
@@ -27,13 +34,20 @@ function GameInterface() {
 
   const handleMove = async () => {
     try {
-      const body = { gameId, player, move };
-      const response = await axios.post('http://localhost:5000/api/game-sessions/make-move', body);
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': token,
+        },
+      };
+      const body = JSON.stringify({ gameId, player, move });
+      const response = await axios.post('http://localhost:5000/api/game-sessions/make-move', body, config);
       setMessage('Move made successfully');
       setGameState(response.data.gameSession);
       console.log('Move made:', response.data);
     } catch (err) {
-      setMessage(err.response?.data?.message || 'Error: Request failed with status code ' + err.response?.status);
+      setMessage(err.response.data.message || 'Error: Request failed with status code ' + err.response.status);
       console.error('Error making move:', err);
     }
   };
@@ -46,27 +60,35 @@ function GameInterface() {
 
   return (
     <div className="game-interface">
-      <h2>Game Interface</h2>
-      <div>
-        <label>Game ID:</label>
-        <input type="text" value={gameId} readOnly />
-      </div>
-      <div>
-        <label>Player:</label>
-        <input type="text" value={player} onChange={(e) => setPlayer(e.target.value)} />
-      </div>
-      <div>
-        <label>Move:</label>
-        <input type="text" value={move} onChange={(e) => setMove(e.target.value)} />
-      </div>
-      <button onClick={handleMove}>Make Move</button>
-      {message && <p>{message}</p>}
+      <header className="game-header">
+        <h1>Duel Masters: AI vs Human</h1>
+        <div className="player-info">
+          <div>
+            <label>Game ID:</label>
+            <input type="text" value={gameId} readOnly />
+          </div>
+          <div>
+            <label>Player:</label>
+            <input type="text" value={player} onChange={(e) => setPlayer(e.target.value)} />
+          </div>
+          <div>
+            <label>Move:</label>
+            <input type="text" value={move} onChange={(e) => setMove(e.target.value)} />
+          </div>
+          <button onClick={handleMove}>Make Move</button>
+        </div>
+      </header>
+      {message && <p className="message">{message}</p>}
       {gameState && (
         <>
-          <h3>Game State</h3>
-          <div>Player Positions: {JSON.stringify(gameState.playerPositions)}</div>
-          <div>Player Health: {JSON.stringify(gameState.playerHealth)}</div>
-          <div>Moves: {JSON.stringify(gameState.moves)}</div>
+          <section className="game-state">
+            <h3>Game State</h3>
+            <div className="state-info">
+              <div><strong>Player Positions:</strong> {JSON.stringify(gameState.playerPositions)}</div>
+              <div><strong>Player Health:</strong> {JSON.stringify(gameState.playerHealth)}</div>
+              <div><strong>Moves:</strong> {JSON.stringify(gameState.moves)}</div>
+            </div>
+          </section>
           <Board gameState={gameState} />
         </>
       )}
