@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Board from './Board';
 import './GameInterface.css';
+import playerIcon from './icons/player.png';
+import aiIcon from './icons/ai.png';
 
 function GameInterface() {
   const [gameId, setGameId] = useState('');
@@ -32,7 +34,7 @@ function GameInterface() {
     }
   };
 
-  const handleMove = async () => {
+  const handleMove = async (selectedMove) => {
     try {
       const token = localStorage.getItem('token');
       const config = {
@@ -41,7 +43,7 @@ function GameInterface() {
           'x-auth-token': token,
         },
       };
-      const body = JSON.stringify({ gameId, player, move });
+      const body = JSON.stringify({ gameId, player, move: selectedMove });
       const response = await axios.post('http://localhost:5000/api/game-sessions/make-move', body, config);
       setMessage('Move made successfully');
       setGameState(response.data.gameSession);
@@ -63,19 +65,25 @@ function GameInterface() {
       <header className="game-header">
         <h1>Duel Masters: AI vs Human</h1>
         <div className="player-info">
-          <div>
+          <div className="info-item">
+            <img src={playerIcon} alt="Player Icon" className="player-icon" />
             <label>Game ID:</label>
             <input type="text" value={gameId} readOnly />
           </div>
-          <div>
+          <div className="info-item">
+            <img src={playerIcon} alt="Player Icon" className="player-icon" />
             <label>Player:</label>
             <input type="text" value={player} onChange={(e) => setPlayer(e.target.value)} />
           </div>
-          <div>
-            <label>Move:</label>
-            <input type="text" value={move} onChange={(e) => setMove(e.target.value)} />
+          <div className="move-buttons">
+            <button onClick={() => handleMove('up')}>Up</button>
+            <button onClick={() => handleMove('down')}>Down</button>
+            <button onClick={() => handleMove('left')}>Left</button>
+            <button onClick={() => handleMove('right')}>Right</button>
+            <button onClick={() => handleMove('attack')}>Attack</button>
+            <button onClick={() => handleMove('defend')}>Defend</button>
+            <button onClick={() => handleMove('special move')}>Special Move</button>
           </div>
-          <button onClick={handleMove}>Make Move</button>
         </div>
       </header>
       {message && <p className="message">{message}</p>}
@@ -84,8 +92,21 @@ function GameInterface() {
           <section className="game-state">
             <h3>Game State</h3>
             <div className="state-info">
+              <div className="health-info">
+                <div>
+                  <img src={playerIcon} alt="Player Icon" className="health-icon" />
+                  <strong>Player1 Health:</strong> {gameState.playerHealth['Player1']}%
+                </div>
+                <div>
+                  <img src={playerIcon} alt="Player Icon" className="health-icon" />
+                  <strong>Player2 Health:</strong> {gameState.playerHealth['Player2']}%
+                </div>
+                <div>
+                  <img src={aiIcon} alt="AI Icon" className="health-icon" />
+                  <strong>AI Health:</strong> {gameState.playerHealth['AI']}%
+                </div>
+              </div>
               <div><strong>Player Positions:</strong> {JSON.stringify(gameState.playerPositions)}</div>
-              <div><strong>Player Health:</strong> {JSON.stringify(gameState.playerHealth)}</div>
               <div><strong>Moves:</strong> {JSON.stringify(gameState.moves)}</div>
             </div>
           </section>

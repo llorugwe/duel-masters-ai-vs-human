@@ -22,6 +22,12 @@
   margin-top: 10px;
 }
 
+.player-info .info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
 .player-info label {
   margin-right: 10px;
 }
@@ -31,6 +37,19 @@
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #ccc;
+}
+
+.player-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.move-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 button {
@@ -67,4 +86,21 @@ button:hover {
 
 .state-info div {
   margin-bottom: 10px;
+}
+
+.health-info {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.health-info div {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.health-icon {
+  width: 20px;
+  height: 20px;
 }
