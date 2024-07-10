@@ -35,10 +35,7 @@ const CombinedAuth = () => {
         setMessage('Registration successful');
       }
     } catch (err) {
-      setMessage(
-        err.response.data.message ||
-          'Error: Request failed with status code ' + err.response.status
-      );
+      setMessage(err.response.data.msg || 'Error: Request failed with status code ' + err.response.status);
     }
   };
 
