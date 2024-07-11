@@ -3,20 +3,20 @@ const mongoose = require('mongoose');
 const LeaderboardSchema = new mongoose.Schema({
   player: {
     type: String,
-    required: true
+    required: true,
   },
   wins: {
     type: Number,
-    default: 0
+    required: true,
   },
   losses: {
     type: Number,
-    default: 0
+    required: true,
   },
   draws: {
     type: Number,
-    default: 0
-  }
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('Leaderboard', LeaderboardSchema);

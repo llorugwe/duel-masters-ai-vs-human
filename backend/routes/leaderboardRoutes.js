@@ -1,9 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { getLeaderboard } = require('../controllers/leaderboardController');
-const authMiddleware = require('../middleware/authMiddleware');
+const Leaderboard = require('../models/Leaderboard');
 
-// Get leaderboard
-router.get('/', authMiddleware, getLeaderboard);
+router.get('/', async (req, res) => {
+  try {
+    const leaderboard = await Leaderboard.find().sort({ wins: -1 });
+    res.json(leaderboard);
+  } catch (error) {
+    res.status(500).send('Server Error');
+  }
+});
 
 module.exports = router;

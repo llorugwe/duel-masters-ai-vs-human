@@ -1,22 +1,21 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import CombinedAuth from './components/CombinedAuth';
 import GameInterface from './components/GameInterface';
-import GameSessions from './components/GameSessions';
-import Leaderboard from './components/Leaderboard';
-import GameScene from './components/GameScene';
+import ChooseOpponent from './components/ChooseOpponent';
+import Leaderboard from './components/Leaderboard'; // Import the Leaderboard component
+import './App.css';
 
 function App() {
   return (
     <Router>
-      <div>
+      <div className="App">
         <Routes>
           <Route path="/" element={<CombinedAuth />} />
+          <Route path="/choose-opponent" element={<ChooseOpponent />} />
           <Route path="/game-interface" element={<GameInterface />} />
-          <Route path="/game-sessions" element={<GameSessions />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/game-scene" element={<GameScene />} />
         </Routes>
+        <Leaderboard /> {/* Add the Leaderboard component here */}
       </div>
     </Router>
   );
