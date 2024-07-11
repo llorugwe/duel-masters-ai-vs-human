@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './CombinedAuth.css';
 
 const CombinedAuth = () => {
@@ -10,28 +11,22 @@ const CombinedAuth = () => {
     password: '',
   });
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const { name, email, password } = formData;
 
-  const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
       if (isLogin) {
-        const res = await axios.post('http://localhost:5000/api/auth/login', {
-          email,
-          password,
-        });
+        const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
         localStorage.setItem('token', res.data.token);
         setMessage('Login successful');
+        navigate('/choose-opponent');
       } else {
-        await axios.post('http://localhost:5000/api/auth/register', {
-          name,
-          email,
-          password,
-        });
+        await axios.post('http://localhost:5000/api/auth/register', { name, email, password });
         setMessage('Registration successful');
       }
     } catch (err) {
@@ -49,37 +44,16 @@ const CombinedAuth = () => {
           {!isLogin && (
             <div className="form-group">
               <label htmlFor="name">Name</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={name}
-                onChange={onChange}
-                required={!isLogin}
-              />
+              <input type="text" id="name" name="name" value={name} onChange={onChange} required={!isLogin} />
             </div>
           )}
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={onChange}
-              required
-            />
+            <input type="email" id="email" name="email" value={email} onChange={onChange} required />
           </div>
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={onChange}
-              required
-            />
+            <input type="password" id="password" name="password" value={password} onChange={onChange} required />
           </div>
           <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
         </form>

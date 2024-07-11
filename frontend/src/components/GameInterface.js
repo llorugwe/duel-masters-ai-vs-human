@@ -11,6 +11,7 @@ function GameInterface() {
   const [move, setMove] = useState('');
   const [message, setMessage] = useState('');
   const [gameState, setGameState] = useState(null);
+  const opponent = localStorage.getItem('opponent') || 'AI'; // Get the opponent from localStorage
 
   const handleCreateGameSession = async () => {
     try {
@@ -23,7 +24,7 @@ function GameInterface() {
       };
       const response = await axios.post('http://localhost:5000/api/game-sessions', {
         sessionName: 'New Game',
-        players: ['Player1', 'Player2', 'AI']
+        players: ['Player1', 'Player2', opponent]
       }, config);
       setGameId(response.data._id);
       setGameState(response.data);
@@ -103,7 +104,7 @@ function GameInterface() {
                 </div>
                 <div>
                   <img src={aiIcon} alt="AI Icon" className="health-icon" />
-                  <strong>AI Health:</strong> {gameState.playerHealth['AI']}%
+                  <strong>{opponent} Health:</strong> {gameState.playerHealth[opponent]}%
                 </div>
               </div>
               <div><strong>Player Positions:</strong> {JSON.stringify(gameState.playerPositions)}</div>

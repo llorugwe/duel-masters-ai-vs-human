@@ -1,0 +1,38 @@
+.choose-opponent-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .opponent-selection {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .opponent-selection button {
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .opponent-selection .selected {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .start-game-btn {
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+  
+  .leaderboard {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .leaderboard li {
+    padding: 5px 0;
+  }
+  
