@@ -1,0 +1,29 @@
+.leaderboard-container {
+    text-align: center;
+    margin: 20px;
+  }
+  
+  .leaderboard-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .leaderboard-item {
+    background: #f8f8f8;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .leaderboard-player {
+    font-weight: bold;
+  }
+  
+  .leaderboard-stats {
+    font-size: 14px;
+    color: #555;
+  }
+  
