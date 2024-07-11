@@ -1,23 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ChooseOpponent.css';
+import Leaderboard from './Leaderboard';
 
 const ChooseOpponent = () => {
-  const [leaderboard, setLeaderboard] = useState([]);
   const [opponent, setOpponent] = useState('AI');
-
-  useEffect(() => {
-    const fetchLeaderboard = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/leaderboard');
-        setLeaderboard(response.data);
-      } catch (err) {
-        console.error('Error fetching leaderboard', err);
-      }
-    };
-
-    fetchLeaderboard();
-  }, []);
 
   const handleStartGame = () => {
     localStorage.setItem('opponent', opponent);
@@ -33,15 +20,7 @@ const ChooseOpponent = () => {
         <button onClick={() => setOpponent('Human')} className={opponent === 'Human' ? 'selected' : ''}>Human</button>
       </div>
       <button onClick={handleStartGame} className="start-game-btn">Start Game</button>
-      
-      <h2>Leaderboard</h2>
-      <ul className="leaderboard">
-        {leaderboard.map((entry, index) => (
-          <li key={index}>
-            <span>{entry.player}</span> - <span>{entry.score}</span>
-          </li>
-        ))}
-      </ul>
+      <Leaderboard />
     </div>
   );
 };
