@@ -1,11 +1,24 @@
 const GameSession = require('../models/GameSession');
 const { validationResult } = require('express-validator');
 
+// Define the board array
+const board = [
+  [{ terrain: 'mountain' }, { terrain: 'desert' }, { terrain: 'forest' }, { terrain: 'water' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'grass' }, { terrain: 'mountain' }, { terrain: 'forest' }, { terrain: 'water' }],
+  [{ terrain: 'grass' }, { terrain: 'forest' }, { terrain: 'desert' }, { terrain: 'forest' }, { terrain: 'grass' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'water' }, { terrain: 'water' }],
+  [{ terrain: 'water' }, { terrain: 'desert' }, { terrain: 'grass' }, { terrain: 'water' }, { terrain: 'desert' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'water' }, { terrain: 'forest' }, { terrain: 'mountain' }],
+  [{ terrain: 'grass' }, { terrain: 'desert' }, { terrain: 'water' }, { terrain: 'desert' }, { terrain: 'water' }, { terrain: 'grass' }, { terrain: 'water' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'forest' }],
+  [{ terrain: 'water' }, { terrain: 'forest' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'desert' }, { terrain: 'water' }, { terrain: 'water' }, { terrain: 'grass' }, { terrain: 'forest' }, { terrain: 'grass' }],
+  [{ terrain: 'mountain' }, { terrain: 'grass' }, { terrain: 'water' }, { terrain: 'water' }, { terrain: 'mountain' }, { terrain: 'desert' }, { terrain: 'grass' }, { terrain: 'water' }, { terrain: 'mountain' }, { terrain: 'desert' }],
+  [{ terrain: 'water' }, { terrain: 'grass' }, { terrain: 'forest' }, { terrain: 'forest' }, { terrain: 'desert' }, { terrain: 'water' }, { terrain: 'water' }, { terrain: 'forest' }, { terrain: 'mountain' }, { terrain: 'desert' }],
+  [{ terrain: 'forest' }, { terrain: 'mountain' }, { terrain: 'grass' }, { terrain: 'mountain' }, { terrain: 'desert' }, { terrain: 'grass' }, { terrain: 'grass' }, { terrain: 'grass' }, { terrain: 'forest' }, { terrain: 'forest' }],
+  [{ terrain: 'mountain' }, { terrain: 'grass' }, { terrain: 'desert' }, { terrain: 'desert' }, { terrain: 'grass' }, { terrain: 'mountain' }, { terrain: 'water' }, { terrain: 'forest' }, { terrain: 'forest' }, { terrain: 'mountain' }],
+  [{ terrain: 'forest' }, { terrain: 'mountain' }, { terrain: 'grass' }, { terrain: 'water' }, { terrain: 'desert' }, { terrain: 'water' }, { terrain: 'forest' }, { terrain: 'desert' }, { terrain: 'grass' }, { terrain: 'desert' }]
+];
+
 // Function to handle player move and update game state
 const handlePlayerMove = (gameSession, player, move) => {
   const playerPositions = gameSession.playerPositions;
   const playerHealth = gameSession.playerHealth;
-  const board = gameSession.board;
 
   const currentPosition = playerPositions[player] || [0, 0];
   let newPosition = [...currentPosition];
@@ -24,7 +37,7 @@ const handlePlayerMove = (gameSession, player, move) => {
       newPosition[0] = Math.min(board[0].length - 1, newPosition[0] + 1);
       break;
     case 'attack':
-      const opponent = gameSession.players.find(p => p !== player);
+      const opponent = gameSession.players.find((p) => p !== player);
       if (opponent) {
         playerHealth[opponent] = (playerHealth[opponent] || 100) - 10;
       }
@@ -65,29 +78,24 @@ const createGameSession = async (req, res) => {
   const { sessionName, players } = req.body;
 
   try {
+    const initialPositions = {
+      Player1: [0, 0],
+      Player2: [board[0].length - 1, board.length - 1],
+      AI: [Math.floor(board[0].length / 2), Math.floor(board.length / 2)]
+    };
+
     const newGameSession = new GameSession({
       sessionName,
       players,
       playerPositions: players.reduce((acc, player) => {
-        acc[player] = [0, 0];
+        acc[player] = initialPositions[player];
         return acc;
       }, {}),
       playerHealth: players.reduce((acc, player) => {
         acc[player] = 100;
         return acc;
       }, {}),
-      board: [
-        [{ terrain: 'mountain' }, { terrain: 'desert' }, { terrain: 'forest' }, { terrain: 'water' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'grass' }, { terrain: 'mountain' }, { terrain: 'forest' }, { terrain: 'water' }],
-        [{ terrain: 'grass' }, { terrain: 'forest' }, { terrain: 'desert' }, { terrain: 'forest' }, { terrain: 'grass' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'water' }, { terrain: 'water' }],
-        [{ terrain: 'water' }, { terrain: 'desert' }, { terrain: 'grass' }, { terrain: 'water' }, { terrain: 'desert' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'water' }, { terrain: 'forest' }, { terrain: 'mountain' }],
-        [{ terrain: 'grass' }, { terrain: 'desert' }, { terrain: 'water' }, { terrain: 'desert' }, { terrain: 'water' }, { terrain: 'grass' }, { terrain: 'water' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'forest' }],
-        [{ terrain: 'water' }, { terrain: 'forest' }, { terrain: 'mountain' }, { terrain: 'mountain' }, { terrain: 'desert' }, { terrain: 'water' }, { terrain: 'water' }, { terrain: 'grass' }, { terrain: 'forest' }, { terrain: 'grass' }],
-        [{ terrain: 'mountain' }, { terrain: 'grass' }, { terrain: 'water' }, { terrain: 'water' }, { terrain: 'mountain' }, { terrain: 'desert' }, { terrain: 'grass' }, { terrain: 'water' }, { terrain: 'mountain' }, { terrain: 'desert' }],
-        [{ terrain: 'water' }, { terrain: 'grass' }, { terrain: 'forest' }, { terrain: 'forest' }, { terrain: 'desert' }, { terrain: 'water' }, { terrain: 'water' }, { terrain: 'forest' }, { terrain: 'mountain' }, { terrain: 'desert' }],
-        [{ terrain: 'forest' }, { terrain: 'mountain' }, { terrain: 'grass' }, { terrain: 'mountain' }, { terrain: 'desert' }, { terrain: 'grass' }, { terrain: 'grass' }, { terrain: 'grass' }, { terrain: 'forest' }, { terrain: 'forest' }],
-        [{ terrain: 'mountain' }, { terrain: 'grass' }, { terrain: 'desert' }, { terrain: 'desert' }, { terrain: 'grass' }, { terrain: 'mountain' }, { terrain: 'water' }, { terrain: 'forest' }, { terrain: 'forest' }, { terrain: 'mountain' }],
-        [{ terrain: 'forest' }, { terrain: 'mountain' }, { terrain: 'grass' }, { terrain: 'water' }, { terrain: 'desert' }, { terrain: 'water' }, { terrain: 'forest' }, { terrain: 'desert' }, { terrain: 'grass' }, { terrain: 'desert' }]
-      ]
+      board: board // Use the predefined board array
     });
 
     await newGameSession.save();
