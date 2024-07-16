@@ -35,7 +35,7 @@ nav ul li a {
   padding: 2rem;
   text-align: center;
   background-image: url('cover-image.png');
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   color: #333;
 }
@@ -81,7 +81,7 @@ nav ul li a {
 
 .feature img {
   width: 100%;
-  max-width: 500px; /* Increased max-width for better visibility */
+  max-width: 600px; /* Slightly increased max-width for better visibility */
   height: auto;
   margin-right: 1rem;
   border-radius: 10px;
