@@ -81,7 +81,7 @@ nav ul li a {
 
 .feature img {
   width: 100%;
-  max-width: 300px;
+  max-width: 500px; /* Increased max-width for better visibility */
   height: auto;
   margin-right: 1rem;
   border-radius: 10px;
