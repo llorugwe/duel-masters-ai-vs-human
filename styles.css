@@ -54,12 +54,20 @@ nav ul li a {
 }
 
 .feature {
+  display: flex;
+  align-items: center;
   margin-bottom: 2rem;
 }
 
 .feature img {
-  max-width: 100%;
-  height: auto;
+  width: 150px;
+  height: 150px;
+  margin-right: 1rem;
+}
+
+.feature-text {
+  text-align: left;
+  padding: 1rem;
 }
 
 .team ul {
@@ -87,9 +95,4 @@ nav a:hover {
 
 button:hover {
   background-color: #0056b3;
-}
-
-.feature-text {
-  text-align: left;
-  padding: 1rem;
 }
