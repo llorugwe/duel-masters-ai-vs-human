@@ -5,7 +5,7 @@ import player2Icon from './icons/player2.png';
 import aiIcon from './icons/ai.png';
 
 const Board = ({ gameState }) => {
-  const { board, playerPositions } = gameState;
+  const { board = [], playerPositions = {} } = gameState || {};
 
   return (
     <div className="board">
