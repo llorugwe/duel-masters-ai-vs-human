@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Board from './Board';
 import './GameInterface.css';
-import playerIcon from './icons/player.png';
+import player1Icon from './icons/player1.png';
+import player2Icon from './icons/player2.png';
 import aiIcon from './icons/ai.png';
-import player2Icon from './icons/player2.png'; // Assuming there's an icon for Player2
 
 function GameInterface() {
   const [gameId, setGameId] = useState('');
@@ -12,7 +12,7 @@ function GameInterface() {
   const [move, setMove] = useState('');
   const [message, setMessage] = useState('');
   const [gameState, setGameState] = useState(null);
-  const players = JSON.parse(localStorage.getItem('players')) || ['Player1', 'AI'];
+  const opponent = localStorage.getItem('opponent') || 'AI'; // Get the opponent from localStorage
 
   const handleCreateGameSession = async () => {
     try {
@@ -25,7 +25,7 @@ function GameInterface() {
       };
       const response = await axios.post('http://localhost:5000/api/game-sessions', {
         sessionName: 'New Game',
-        players: players
+        players: ['Player1', opponent]
       }, config);
       setGameId(response.data._id);
       setGameState(response.data);
@@ -68,12 +68,12 @@ function GameInterface() {
         <h1>Duel Masters: AI vs Human</h1>
         <div className="player-info">
           <div className="info-item">
-            <img src={playerIcon} alt="Player Icon" className="player-icon" />
+            <img src={player1Icon} alt="Player Icon" className="player-icon" />
             <label>Game ID:</label>
             <input type="text" value={gameId} readOnly />
           </div>
           <div className="info-item">
-            <img src={playerIcon} alt="Player Icon" className="player-icon" />
+            <img src={player1Icon} alt="Player Icon" className="player-icon" />
             <label>Player:</label>
             <input type="text" value={player} readOnly />
           </div>
@@ -99,24 +99,14 @@ function GameInterface() {
             <h3>Game State</h3>
             <div className="state-info">
               <div className="health-info">
-                {players.includes('Player1') && (
-                  <div>
-                    <img src={playerIcon} alt="Player Icon" className="health-icon" />
-                    <strong>Player1 Health:</strong> {gameState.playerHealth['Player1']}%
-                  </div>
-                )}
-                {players.includes('Player2') && (
-                  <div>
-                    <img src={player2Icon} alt="Player2 Icon" className="health-icon" />
-                    <strong>Player2 Health:</strong> {gameState.playerHealth['Player2']}%
-                  </div>
-                )}
-                {players.includes('AI') && (
-                  <div>
-                    <img src={aiIcon} alt="AI Icon" className="health-icon" />
-                    <strong>AI Health:</strong> {gameState.playerHealth['AI']}%
-                  </div>
-                )}
+                <div>
+                  <img src={player1Icon} alt="Player Icon" className="health-icon" />
+                  <strong>Player1 Health:</strong> {gameState.playerHealth['Player1']}%
+                </div>
+                <div>
+                  <img src={opponent === 'AI' ? aiIcon : player2Icon} alt="Opponent Icon" className="health-icon" />
+                  <strong>{opponent} Health:</strong> {gameState.playerHealth[opponent]}%
+                </div>
               </div>
               <div><strong>Player Positions:</strong> {JSON.stringify(gameState.playerPositions)}</div>
               <div><strong>Moves:</strong> {JSON.stringify(gameState.moves)}</div>
