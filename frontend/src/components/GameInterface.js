@@ -7,7 +7,7 @@ import aiIcon from './icons/ai.png';
 
 function GameInterface() {
   const [gameId, setGameId] = useState('');
-  const [player, setPlayer] = useState('');
+  const [player, setPlayer] = useState(localStorage.getItem('playerName') || '');
   const [move, setMove] = useState('');
   const [message, setMessage] = useState('');
   const [gameState, setGameState] = useState(null);
@@ -74,13 +74,17 @@ function GameInterface() {
           <div className="info-item">
             <img src={playerIcon} alt="Player Icon" className="player-icon" />
             <label>Player:</label>
-            <input type="text" value={player} onChange={(e) => setPlayer(e.target.value)} />
+            <input type="text" value={player} readOnly />
           </div>
           <div className="move-buttons">
-            <button onClick={() => handleMove('up')}>Up</button>
-            <button onClick={() => handleMove('down')}>Down</button>
-            <button onClick={() => handleMove('left')}>Left</button>
-            <button onClick={() => handleMove('right')}>Right</button>
+            <button className="move-button" onClick={() => handleMove('up')}>Up</button>
+            <div className="horizontal-buttons">
+              <button className="move-button" onClick={() => handleMove('left')}>Left</button>
+              <button className="move-button" onClick={() => handleMove('right')}>Right</button>
+            </div>
+            <button className="move-button" onClick={() => handleMove('down')}>Down</button>
+          </div>
+          <div className="action-buttons">
             <button onClick={() => handleMove('attack')}>Attack</button>
             <button onClick={() => handleMove('defend')}>Defend</button>
             <button onClick={() => handleMove('special move')}>Special Move</button>

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './OpponentSelection.css';
 
-const OpponentSelection = ({ history }) => {
-  const [player, setPlayer] = useState('');
+const OpponentSelection = () => {
+  const [player, setPlayer] = useState(localStorage.getItem('playerName') || '');
   const [opponent, setOpponent] = useState('');
   const [leaderboard, setLeaderboard] = useState([]);
+  const navigate = useNavigate();
 
   const fetchLeaderboard = async () => {
     try {
@@ -22,16 +24,17 @@ const OpponentSelection = ({ history }) => {
 
   const startGame = () => {
     if (player && opponent) {
-      history.push('/game', { player, opponent });
+      localStorage.setItem('opponent', opponent); // Store selected opponent
+      navigate('/game-interface'); // Redirect to game interface
     }
   };
 
   return (
     <div className="opponent-selection">
-      <h2>Select Opponent</h2>
+      <h2>Select Your Opponent</h2>
       <div className="form-group">
         <label>Player Name:</label>
-        <input type="text" value={player} onChange={(e) => setPlayer(e.target.value)} />
+        <input type="text" value={player} readOnly />
       </div>
       <div className="form-group">
         <label>Opponent:</label>
@@ -41,9 +44,9 @@ const OpponentSelection = ({ history }) => {
           <option value="Player2">Another Player</option>
         </select>
       </div>
-      <button onClick={startGame}>Start Game</button>
+      <button onClick={startGame} className="start-game-button">Start Game</button>
       <section className="leaderboard-section">
-        <h2>Leaderboard</h2>
+        <h3>Leaderboard</h3>
         <ul>
           {leaderboard.map((player, index) => (
             <li key={index}>
