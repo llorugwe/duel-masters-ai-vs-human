@@ -80,13 +80,15 @@ const createGameSession = async (req, res) => {
       AI: [Math.floor(board[0].length / 2), Math.floor(board.length / 2)]
     };
 
+    const selectedPositions = players.reduce((acc, player) => {
+      acc[player] = initialPositions[player];
+      return acc;
+    }, {});
+
     const newGameSession = new GameSession({
       sessionName,
       players,
-      playerPositions: players.reduce((acc, player) => {
-        acc[player] = initialPositions[player];
-        return acc;
-      }, {}),
+      playerPositions: selectedPositions,
       playerHealth: players.reduce((acc, player) => {
         acc[player] = 100;
         return acc;
@@ -124,12 +126,15 @@ const makeMove = async (req, res) => {
     handlePlayerMove(gameSession, player, move);
     gameSession.moves.push({ player, move });
 
-    const aiResponse = aiMakeMove(gameSession);
-    gameSession.moves.push({ player: 'AI', move: aiResponse });
+    // Only make AI move if AI is one of the players
+    if (gameSession.players.includes('AI')) {
+      const aiResponse = aiMakeMove(gameSession);
+      gameSession.moves.push({ player: 'AI', move: aiResponse });
+    }
 
     await gameSession.save();
 
-    res.status(200).json({ message: 'Move made successfully', gameSession, aiResponse });
+    res.status(200).json({ message: 'Move made successfully', gameSession });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: 'Server error' });

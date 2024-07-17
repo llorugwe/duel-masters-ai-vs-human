@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import './ChooseOpponent.css';
 import Leaderboard from './Leaderboard';
 
@@ -7,7 +6,14 @@ const ChooseOpponent = () => {
   const [opponent, setOpponent] = useState('AI');
 
   const handleStartGame = () => {
-    localStorage.setItem('opponent', opponent);
+    const players = ['Player1'];
+    if (opponent === 'AI') {
+      players.push('AI');
+    } else {
+      players.push('Player2');
+    }
+    localStorage.setItem('players', JSON.stringify(players));
+    localStorage.setItem('opponent', opponent); // Store the opponent in localStorage
     // Redirect to game interface
     window.location.href = '/game-interface';
   };

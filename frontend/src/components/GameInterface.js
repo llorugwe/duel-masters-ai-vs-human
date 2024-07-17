@@ -4,6 +4,7 @@ import Board from './Board';
 import './GameInterface.css';
 import playerIcon from './icons/player.png';
 import aiIcon from './icons/ai.png';
+import player2Icon from './icons/player2.png'; // Assuming there's an icon for Player2
 
 function GameInterface() {
   const [gameId, setGameId] = useState('');
@@ -11,7 +12,7 @@ function GameInterface() {
   const [move, setMove] = useState('');
   const [message, setMessage] = useState('');
   const [gameState, setGameState] = useState(null);
-  const opponent = localStorage.getItem('opponent') || 'AI'; // Get the opponent from localStorage
+  const players = JSON.parse(localStorage.getItem('players')) || ['Player1', 'AI'];
 
   const handleCreateGameSession = async () => {
     try {
@@ -24,7 +25,7 @@ function GameInterface() {
       };
       const response = await axios.post('http://localhost:5000/api/game-sessions', {
         sessionName: 'New Game',
-        players: ['Player1', 'Player2', opponent]
+        players: players
       }, config);
       setGameId(response.data._id);
       setGameState(response.data);
@@ -98,18 +99,24 @@ function GameInterface() {
             <h3>Game State</h3>
             <div className="state-info">
               <div className="health-info">
-                <div>
-                  <img src={playerIcon} alt="Player Icon" className="health-icon" />
-                  <strong>Player1 Health:</strong> {gameState.playerHealth['Player1']}%
-                </div>
-                <div>
-                  <img src={playerIcon} alt="Player Icon" className="health-icon" />
-                  <strong>Player2 Health:</strong> {gameState.playerHealth['Player2']}%
-                </div>
-                <div>
-                  <img src={aiIcon} alt="AI Icon" className="health-icon" />
-                  <strong>{opponent} Health:</strong> {gameState.playerHealth[opponent]}%
-                </div>
+                {players.includes('Player1') && (
+                  <div>
+                    <img src={playerIcon} alt="Player Icon" className="health-icon" />
+                    <strong>Player1 Health:</strong> {gameState.playerHealth['Player1']}%
+                  </div>
+                )}
+                {players.includes('Player2') && (
+                  <div>
+                    <img src={player2Icon} alt="Player2 Icon" className="health-icon" />
+                    <strong>Player2 Health:</strong> {gameState.playerHealth['Player2']}%
+                  </div>
+                )}
+                {players.includes('AI') && (
+                  <div>
+                    <img src={aiIcon} alt="AI Icon" className="health-icon" />
+                    <strong>AI Health:</strong> {gameState.playerHealth['AI']}%
+                  </div>
+                )}
               </div>
               <div><strong>Player Positions:</strong> {JSON.stringify(gameState.playerPositions)}</div>
               <div><strong>Moves:</strong> {JSON.stringify(gameState.moves)}</div>
