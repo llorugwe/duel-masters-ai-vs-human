@@ -6,7 +6,7 @@
   },
   "scripts": {
     "start": "node backend/server.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
+    "heroku-postbuild": "npm install --prefix frontend && npm run build --prefix frontend"
   },
   "dependencies": {
     "express": "^4.19.2",
@@ -18,7 +18,7 @@
     "express-validator": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "react-router-dom": "^6.24.1",
-    "concurrently": "^6.4.0"
+    "concurrently": "^6.5.1"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
