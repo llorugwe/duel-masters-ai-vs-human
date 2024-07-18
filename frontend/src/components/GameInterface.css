@@ -45,6 +45,18 @@
   margin-right: 10px;
 }
 
+.game-container {
+  display: flex;
+}
+
+.move-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 20px;
+}
+
 .move-buttons {
   display: flex;
   flex-direction: column;

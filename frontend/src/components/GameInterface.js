@@ -76,49 +76,53 @@ function GameInterface() {
             <label>Player:</label>
             <input type="text" value={player} readOnly />
           </div>
-          <div className="move-buttons">
-            <button className="move-button" onClick={() => handleMove('up')}>Up</button>
-            <div className="horizontal-buttons">
-              <button className="move-button" onClick={() => handleMove('left')}>Left</button>
-              <button className="move-button" onClick={() => handleMove('right')}>Right</button>
-            </div>
-            <button className="move-button" onClick={() => handleMove('down')}>Down</button>
-          </div>
-          <div className="action-buttons">
-            <button onClick={() => handleMove('attack')}>Attack</button>
-            <button onClick={() => handleMove('defend')}>Defend</button>
-            <button onClick={() => handleMove('special move')}>Special Move</button>
-          </div>
         </div>
       </header>
       {message && <p className="message">{message}</p>}
       {gameState && (
-        <>
-          <section className="game-state">
-            <h3>Game State</h3>
-            <div className="state-info">
-              <div className="health-info">
+        <div className="game-container">
+          <Board gameState={gameState} />
+          <div className="move-controls">
+            <div className="move-buttons">
+              <button className="move-button" onClick={() => handleMove('up')}>Up</button>
+              <div className="horizontal-buttons">
+                <button className="move-button" onClick={() => handleMove('left')}>Left</button>
+                <button className="move-button" onClick={() => handleMove('right')}>Right</button>
+              </div>
+              <button className="move-button" onClick={() => handleMove('down')}>Down</button>
+            </div>
+            <div className="action-buttons">
+              <button onClick={() => handleMove('attack')}>Attack</button>
+              <button onClick={() => handleMove('defend')}>Defend</button>
+              <button onClick={() => handleMove('special move')}>Special Move</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {gameState && (
+        <section className="game-state">
+          <h3>Game State</h3>
+          <div className="state-info">
+            <div className="health-info">
+              <div>
+                <img src={playerIcon} alt="Player Icon" className="health-icon" />
+                <strong>Player1 Health:</strong> {gameState.playerHealth['Player1']}%
+              </div>
+              {opponent !== 'AI' && (
                 <div>
                   <img src={playerIcon} alt="Player Icon" className="health-icon" />
-                  <strong>Player1 Health:</strong> {gameState.playerHealth['Player1']}%
+                  <strong>Player2 Health:</strong> {gameState.playerHealth['Player2']}%
                 </div>
-                {opponent !== 'AI' && (
-                  <div>
-                    <img src={playerIcon} alt="Player Icon" className="health-icon" />
-                    <strong>Player2 Health:</strong> {gameState.playerHealth['Player2']}%
-                  </div>
-                )}
-                {opponent === 'AI' && (
-                  <div>
-                    <img src={aiIcon} alt="AI Icon" className="health-icon" />
-                    <strong>AI Health:</strong> {gameState.playerHealth['AI']}%
-                  </div>
-                )}
-              </div>
+              )}
+              {opponent === 'AI' && (
+                <div>
+                  <img src={aiIcon} alt="AI Icon" className="health-icon" />
+                  <strong>AI Health:</strong> {gameState.playerHealth['AI']}%
+                </div>
+              )}
             </div>
-          </section>
-          <Board gameState={gameState} />
-        </>
+          </div>
+        </section>
       )}
     </div>
   );
