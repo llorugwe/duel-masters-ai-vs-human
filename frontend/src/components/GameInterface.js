@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Board from './Board';
 import './GameInterface.css';
-import player1Icon from './icons/player1.png';
-import player2Icon from './icons/player2.png';
+import playerIcon from './icons/player.png';
 import aiIcon from './icons/ai.png';
 
 function GameInterface() {
@@ -25,7 +24,7 @@ function GameInterface() {
       };
       const response = await axios.post('http://localhost:5000/api/game-sessions', {
         sessionName: 'New Game',
-        players: ['Player1', opponent]
+        players: [player, opponent]
       }, config);
       setGameId(response.data._id);
       setGameState(response.data);
@@ -68,12 +67,12 @@ function GameInterface() {
         <h1>Duel Masters: AI vs Human</h1>
         <div className="player-info">
           <div className="info-item">
-            <img src={player1Icon} alt="Player Icon" className="player-icon" />
+            <img src={playerIcon} alt="Player Icon" className="player-icon" />
             <label>Game ID:</label>
             <input type="text" value={gameId} readOnly />
           </div>
           <div className="info-item">
-            <img src={player1Icon} alt="Player Icon" className="player-icon" />
+            <img src={playerIcon} alt="Player Icon" className="player-icon" />
             <label>Player:</label>
             <input type="text" value={player} readOnly />
           </div>
@@ -100,16 +99,22 @@ function GameInterface() {
             <div className="state-info">
               <div className="health-info">
                 <div>
-                  <img src={player1Icon} alt="Player Icon" className="health-icon" />
+                  <img src={playerIcon} alt="Player Icon" className="health-icon" />
                   <strong>Player1 Health:</strong> {gameState.playerHealth['Player1']}%
                 </div>
-                <div>
-                  <img src={opponent === 'AI' ? aiIcon : player2Icon} alt="Opponent Icon" className="health-icon" />
-                  <strong>{opponent} Health:</strong> {gameState.playerHealth[opponent]}%
-                </div>
+                {opponent !== 'AI' && (
+                  <div>
+                    <img src={playerIcon} alt="Player Icon" className="health-icon" />
+                    <strong>Player2 Health:</strong> {gameState.playerHealth['Player2']}%
+                  </div>
+                )}
+                {opponent === 'AI' && (
+                  <div>
+                    <img src={aiIcon} alt="AI Icon" className="health-icon" />
+                    <strong>AI Health:</strong> {gameState.playerHealth['AI']}%
+                  </div>
+                )}
               </div>
-              <div><strong>Player Positions:</strong> {JSON.stringify(gameState.playerPositions)}</div>
-              <div><strong>Moves:</strong> {JSON.stringify(gameState.moves)}</div>
             </div>
           </section>
           <Board gameState={gameState} />

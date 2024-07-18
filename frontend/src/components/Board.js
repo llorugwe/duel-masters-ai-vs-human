@@ -1,41 +1,37 @@
 import React from 'react';
 import './Board.css';
-import player1Icon from './icons/player1.png';
-import player2Icon from './icons/player2.png';
+import player1Icon from './icons/player1.png'; // Change to correct player 1 icon
+import player2Icon from './icons/player2.png'; // Ensure you have an icon for player 2
 import aiIcon from './icons/ai.png';
 
 const Board = ({ gameState }) => {
-  const { board, playerPositions, playerHealth } = gameState;
-
-  // Create a map to track the positions of the players
-  const playerPositionMap = new Map();
-  Object.entries(playerPositions).forEach(([player, [x, y]]) => {
-    playerPositionMap.set(`${x}-${y}`, player);
-  });
+  const { board, playerPositions } = gameState;
 
   return (
     <div className="board">
       {board.map((row, rowIndex) => (
         <div key={rowIndex} className="board-row">
           {row.map((cell, colIndex) => {
-            const player = playerPositionMap.get(`${colIndex}-${rowIndex}`);
+            const isPlayerHere = Object.entries(playerPositions).find(
+              ([player, [x, y]]) => x === colIndex && y === rowIndex
+            );
             return (
               <div key={colIndex} className={`board-cell ${cell.terrain}`}>
-                {player && (
+                {isPlayerHere && (
                   <span
                     className="player-icon"
                     style={{
                       backgroundImage: `url(${
-                        player === 'Player1'
+                        isPlayerHere[0] === 'Player1'
                           ? player1Icon
-                          : player === 'Player2'
+                          : isPlayerHere[0] === 'Player2'
                           ? player2Icon
                           : aiIcon
                       })`
                     }}
                   >
                     <span className="player-health">
-                      {playerHealth[player]}%
+                      {gameState.playerHealth[isPlayerHere[0]]}%
                     </span>
                   </span>
                 )}

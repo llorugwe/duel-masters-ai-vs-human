@@ -80,16 +80,16 @@ const createGameSession = async (req, res) => {
       AI: [Math.floor(board[0].length / 2), Math.floor(board.length / 2)]
     };
 
-    const selectedPositions = players.reduce((acc, player) => {
-      acc[player] = initialPositions[player];
-      return acc;
-    }, {});
+    const selectedPlayers = players.filter(player => player !== 'AI' || player === 'AI' && players.length === 2);
 
     const newGameSession = new GameSession({
       sessionName,
-      players,
-      playerPositions: selectedPositions,
-      playerHealth: players.reduce((acc, player) => {
+      players: selectedPlayers,
+      playerPositions: selectedPlayers.reduce((acc, player) => {
+        acc[player] = initialPositions[player];
+        return acc;
+      }, {}),
+      playerHealth: selectedPlayers.reduce((acc, player) => {
         acc[player] = 100;
         return acc;
       }, {}),
@@ -126,7 +126,7 @@ const makeMove = async (req, res) => {
     handlePlayerMove(gameSession, player, move);
     gameSession.moves.push({ player, move });
 
-    // Only make AI move if AI is one of the players
+    // Ensure only AI makes a move if it's one of the players
     if (gameSession.players.includes('AI')) {
       const aiResponse = aiMakeMove(gameSession);
       gameSession.moves.push({ player: 'AI', move: aiResponse });
