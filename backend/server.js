@@ -2,30 +2,33 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const path = require('path');
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/duel_masters', {
+mongoose.connect('mongodb://localhost/duel_masters', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => console.log('MongoDB connected'))
   .catch((err) => console.log(err));
 
-app.use('/api/users', require('./routes/userRoutes'));
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/game-sessions', require('./routes/gameSessionRoutes'));
-app.use('/api/ai', require('./routes/aiRoutes'));
-app.use('/api/leaderboard', require('./routes/leaderboardRoutes'));
+app.get('/', (req, res) => res.send('API Running'));
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '..', 'frontend', 'build', 'index.html'));
-  });
-}
+const userRoutes = require('./routes/userRoutes');
+app.use('/api/users', userRoutes);
+
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
+
+const gameSessionRoutes = require('./routes/gameSessionRoutes');
+app.use('/api/game-sessions', gameSessionRoutes);
+
+const aiRoutes = require('./routes/aiRoutes');
+app.use('/api/ai', aiRoutes);
+
+const leaderboardRoutes = require('./routes/leaderboardRoutes');
+app.use('/api/leaderboard', leaderboardRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
