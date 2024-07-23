@@ -1,10 +1,20 @@
 const GameSession = require('../models/GameSession');
 
-// Simple AI logic
+// Advanced AI logic
 const makeAIMove = (gameSession) => {
-  // Example AI move logic: move 'forward' if player move was 'backward', else move 'backward'
+  // Example AI move logic: move based on game state analysis
   const lastMove = gameSession.moves[gameSession.moves.length - 1];
-  const aiMove = lastMove.move === 'backward' ? 'forward' : 'backward';
+  let aiMove;
+
+  // Advanced AI decision-making logic
+  if (gameSession.someCondition) {
+    aiMove = 'specialMove';
+  } else if (lastMove.move === 'backward') {
+    aiMove = 'forward';
+  } else {
+    aiMove = 'backward';
+  }
+
   return aiMove;
 };
 
