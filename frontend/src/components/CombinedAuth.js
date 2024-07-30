@@ -27,7 +27,7 @@ const CombinedAuth = () => {
         setMessage('Login successful');
         navigate('/choose-opponent'); // Navigate to opponent selection
       } else {
-        const res = await axios.post('http://localhost:5000/api/auth/register', { name, email, password });
+        await axios.post('http://localhost:5000/api/auth/register', { name, email, password });
         localStorage.setItem('playerName', name); // Store player's name
         setMessage('Registration successful');
       }

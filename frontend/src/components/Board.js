@@ -1,11 +1,14 @@
 import React from 'react';
 import './Board.css';
-import player1Icon from './icons/player1.png'; // Change to correct player 1 icon
-import player2Icon from './icons/player2.png'; // Ensure you have an icon for player 2
+import player1Icon from './icons/player1.png';
+import player2Icon from './icons/player2.png';
 import aiIcon from './icons/ai.png';
 
 const Board = ({ gameState }) => {
   const { board, playerPositions } = gameState;
+
+  console.log('Game State:', gameState);
+  console.log('Player Positions:', playerPositions);
 
   return (
     <div className="board">

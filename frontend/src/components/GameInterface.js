@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Board from './Board';
 import './GameInterface.css';
@@ -7,13 +7,16 @@ import aiIcon from './icons/ai.png';
 
 function GameInterface() {
   const [gameId, setGameId] = useState('');
-  const [player, setPlayer] = useState(localStorage.getItem('playerName') || '');
-  const [move, setMove] = useState('');
+  const [player] = useState(localStorage.getItem('playerName') || '');
   const [message, setMessage] = useState('');
-  const [gameState, setGameState] = useState(null);
-  const opponent = localStorage.getItem('opponent') || 'AI'; // Get the opponent from localStorage
+  const [gameState, setGameState] = useState({ 
+    board: [], 
+    playerPositions: {}, // Initial positions are set dynamically
+    playerHealth: {} 
+  });
+  const opponent = localStorage.getItem('opponent') || 'AI';
 
-  const handleCreateGameSession = async () => {
+  const handleCreateGameSession = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       const config = {
@@ -26,14 +29,24 @@ function GameInterface() {
         sessionName: 'New Game',
         players: [player, opponent]
       }, config);
-      setGameId(response.data._id);
-      setGameState(response.data);
       console.log('Game session created:', response.data);
+      setGameId(response.data._id);
+      setGameState({
+        ...response.data,
+        playerPositions: {
+          Player1: [0, 0], // Ensure initial position for Player1
+          ...(opponent === 'AI' ? { AI: [4, 4] } : { Player2: [9, 9] }) // Conditional position for AI or Player2
+        },
+        playerHealth: {
+          Player1: 100,
+          ...(opponent === 'AI' ? { AI: 100 } : { Player2: 100 })
+        }
+      });
     } catch (error) {
       console.error('Error creating game session', error);
       setMessage('Failed to create game session. Please try again.');
     }
-  };
+  }, [player, opponent]);
 
   const handleMove = async (selectedMove) => {
     try {
@@ -47,8 +60,8 @@ function GameInterface() {
       const body = JSON.stringify({ gameId, player, move: selectedMove });
       const response = await axios.post('http://localhost:5000/api/game-sessions/make-move', body, config);
       setMessage('Move made successfully');
+      console.log('Move response data:', response.data);
       setGameState(response.data.gameSession);
-      console.log('Move made:', response.data);
     } catch (err) {
       setMessage(err.response.data.message || 'Error: Request failed with status code ' + err.response.status);
       console.error('Error making move:', err);
@@ -59,7 +72,11 @@ function GameInterface() {
     if (!gameId) {
       handleCreateGameSession();
     }
-  }, []);
+  }, [gameId, handleCreateGameSession]);
+
+  useEffect(() => {
+    console.log('Initial Game State:', gameState);
+  }, [gameState]);
 
   return (
     <div className="game-interface">
