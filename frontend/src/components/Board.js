@@ -18,8 +18,11 @@ const Board = ({ gameState }) => {
             const isPlayerHere = Object.entries(playerPositions).find(
               ([player, [x, y]]) => x === colIndex && y === rowIndex
             );
+            const terrainClass = ['grass', 'water', 'desert', 'mountain'].includes(cell.terrain) 
+              ? cell.terrain 
+              : 'default'; // Handle undefined or unexpected terrain types
             return (
-              <div key={colIndex} className={`board-cell ${cell.terrain}`}>
+              <div key={colIndex} className={`board-cell ${terrainClass}`}>
                 {isPlayerHere && (
                   <span
                     className="player-icon"
