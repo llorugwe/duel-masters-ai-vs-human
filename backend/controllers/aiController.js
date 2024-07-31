@@ -1,21 +1,65 @@
 const GameSession = require('../models/GameSession');
 
-// Advanced AI logic
-const makeAIMove = (gameSession) => {
-  // Example AI move logic: move based on game state analysis
-  const lastMove = gameSession.moves[gameSession.moves.length - 1];
-  let aiMove;
+// Evaluate the game state to decide the best move for AI
+const evaluateGameState = (gameSession) => {
+  // Example logic: count the number of moves
+  return gameSession.moves.length;
+};
 
-  // Advanced AI decision-making logic
-  if (gameSession.someCondition) {
-    aiMove = 'specialMove';
-  } else if (lastMove.move === 'backward') {
-    aiMove = 'forward';
-  } else {
-    aiMove = 'backward';
+// Get possible moves for the AI
+const getPossibleMoves = (gameSession) => {
+  return ['forward', 'backward', 'left', 'right'];
+};
+
+// Simplified minimax algorithm for AI decision-making
+const minimax = (gameSession, depth, isMaximizingPlayer) => {
+  const score = evaluateGameState(gameSession);
+  
+  if (depth === 0 || gameSession.isGameOver()) {
+    return score;
   }
 
-  return aiMove;
+  const possibleMoves = getPossibleMoves(gameSession);
+
+  if (isMaximizingPlayer) {
+    let maxEval = -Infinity;
+    for (const move of possibleMoves) {
+      gameSession.moves.push({ player: 'AI', move });
+      const eval = minimax(gameSession, depth - 1, false);
+      gameSession.moves.pop();
+      maxEval = Math.max(maxEval, eval);
+    }
+    return maxEval;
+  } else {
+    let minEval = Infinity;
+    for (const move of possibleMoves) {
+      gameSession.moves.push({ player: 'Player', move });
+      const eval = minimax(gameSession, depth - 1, true);
+      gameSession.moves.pop();
+      minEval = Math.min(minEval, eval);
+    }
+    return minEval;
+  }
+};
+
+// Advanced AI move logic
+const makeAIMove = (gameSession) => {
+  const possibleMoves = getPossibleMoves(gameSession);
+  let bestMove;
+  let bestValue = -Infinity;
+
+  for (const move of possibleMoves) {
+    gameSession.moves.push({ player: 'AI', move });
+    const moveValue = minimax(gameSession, 3, false);
+    gameSession.moves.pop();
+
+    if (moveValue > bestValue) {
+      bestValue = moveValue;
+      bestMove = move;
+    }
+  }
+
+  return bestMove || 'forward';
 };
 
 const makeMove = async (req, res) => {
