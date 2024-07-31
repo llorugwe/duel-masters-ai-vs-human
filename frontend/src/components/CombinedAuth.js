@@ -6,6 +6,7 @@ import './CombinedAuth.css';
 const CombinedAuth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
+    username: '',
     name: '',
     email: '',
     password: '',
@@ -13,7 +14,7 @@ const CombinedAuth = () => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  const { name, email, password } = formData;
+  const { username, name, email, password } = formData;
 
   const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -27,7 +28,7 @@ const CombinedAuth = () => {
         setMessage('Login successful');
         navigate('/choose-opponent'); // Navigate to opponent selection
       } else {
-        await axios.post('http://localhost:5000/api/auth/register', { name, email, password });
+        await axios.post('http://localhost:5000/api/auth/register', { username, name, email, password });
         localStorage.setItem('playerName', name); // Store player's name
         setMessage('Registration successful');
       }
@@ -45,10 +46,14 @@ const CombinedAuth = () => {
         <form onSubmit={onSubmit}>
           {!isLogin && (
             <div className="form-group">
-              <label htmlFor="name">Name</label>
-              <input type="text" id="name" name="name" value={name} onChange={onChange} required={!isLogin} />
+              <label htmlFor="username">Username</label>
+              <input type="text" id="username" name="username" value={username} onChange={onChange} required={!isLogin} />
             </div>
           )}
+          <div className="form-group">
+            <label htmlFor="name">Name</label>
+            <input type="text" id="name" name="name" value={name} onChange={onChange} required={!isLogin} />
+          </div>
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input type="email" id="email" name="email" value={email} onChange={onChange} required />
